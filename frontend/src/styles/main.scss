@@ -1,0 +1,433 @@
+// =====================================================================
+// 1) COLORES DE LA CAFETERÍA: van ANTES de importar Bootstrap
+// =====================================================================
+$cafe-espresso: #3b2418; // marrón oscuro (texto, encabezado)
+$cafe-caramelo: #8f5424; // acción principal (contraste AA con texto blanco)
+$cafe-dorado: #c98b4f; // detalles decorativos
+$cafe-crema: #f5ede3; // fondo de la página
+$cafe-leche: #fffaf3; // fondo de las tarjetas
+
+// Variables de Bootstrap que redefinimos
+$primary: $cafe-caramelo;
+$secondary: $cafe-espresso;
+$body-bg: $cafe-crema;
+$body-color: $cafe-espresso;
+$headings-color: $cafe-espresso;
+$border-radius: 0.75rem;
+$border-color: #e3d3c0;
+$card-bg: $cafe-leche;
+$card-border-color: $border-color;
+$font-family-sans-serif: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+$btn-padding-y: 0.6rem; // botones cómodos para tocar con el dedo
+$btn-padding-x: 1.1rem;
+$form-select-padding-y: 0.6rem;
+
+// =====================================================================
+// 2) BOOTSTRAP (toma las variables de arriba)
+// =====================================================================
+@import "bootstrap/scss/bootstrap";
+
+// =====================================================================
+// 3) ESTILOS PROPIOS (solo apariencia, no cambian el markup)
+// =====================================================================
+:root {
+    --origen-sombra: 0 2px 8px rgba(59, 36, 24, 0.08);
+}
+
+// Contenedor angosto, pensado para celular
+main.container {
+    max-width: 640px;
+    padding-bottom: 3rem;
+}
+
+// Encabezado con la mesa
+main > header {
+    background: $cafe-espresso;
+    color: $cafe-crema;
+    border-radius: $border-radius;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 4px solid $cafe-dorado;
+    box-shadow: var(--origen-sombra);
+
+    h1,
+    .h3 {
+        color: $cafe-crema;
+        letter-spacing: 0.02em;
+    }
+
+    p,
+    .text-muted {
+        color: $cafe-dorado !important; // pisa .text-muted
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+    }
+}
+
+// Cada bloque (café, pastelería, carrito, confirmar) como una tarjeta
+main section {
+    background: $cafe-leche;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--origen-sombra);
+
+    > h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid $cafe-dorado;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+}
+
+// La sección "Menú" solo agrupa café y pastelería (que ya son tarjetas):
+// no se dibuja como tarjeta y su título queda solo para lectores de pantalla
+main > section[aria-labelledby="titulo-menu"] {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin-bottom: 0;
+
+    > h2 {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+}
+
+// Mensajes de carga y de error (role="status" / role="alert")
+main p[role="status"],
+main div[role="status"] {
+    background: #efe3d2;
+    border-radius: $border-radius;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+
+    p {
+        margin-bottom: 0.25rem;
+    }
+}
+
+main div[role="status"] {
+    margin-top: 1rem;
+}
+
+main p[role="alert"] {
+    background: #fbe4e1;
+    color: #7a1f17;
+    border: 1px solid #f1b9b3;
+    border-radius: $border-radius;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+}
+
+// Botón "Reintentar" (viene sin clases de Bootstrap en el markup)
+p[role="alert"] + button:not([class]) {
+    @extend .btn;
+    @extend .btn-primary;
+    margin-top: 0.5rem;
+}
+
+// Selector de café: expreso / filtrado
+.btn[aria-pressed] {
+    flex: 1; // los dos botones se reparten el ancho
+    font-weight: 600;
+}
+
+.btn-primary[aria-pressed="false"] {
+    --bs-btn-color: #{$cafe-caramelo};
+    --bs-btn-bg: #{$cafe-leche};
+    --bs-btn-border-color: #{$cafe-caramelo};
+    --bs-btn-hover-color: #{$cafe-caramelo};
+    --bs-btn-hover-bg: #{$cafe-crema};
+    --bs-btn-hover-border-color: #{$cafe-caramelo};
+}
+
+.btn-primary[aria-pressed="true"] {
+    --bs-btn-bg: #{$cafe-espresso};
+    --bs-btn-border-color: #{$cafe-espresso};
+    --bs-btn-hover-bg: #{$cafe-espresso};
+    --bs-btn-hover-border-color: #{$cafe-espresso};
+}
+
+// Tarjetas de origen: la seleccionada se nota con un borde caramelo
+button.card-body[aria-pressed] {
+    background: transparent;
+    border-radius: $border-radius;
+    transition: box-shadow 0.15s ease, background 0.15s ease;
+
+    &:hover {
+        background: $cafe-crema;
+    }
+
+    &[aria-pressed="true"] {
+        background: #fff3e0;
+        box-shadow: inset 0 0 0 3px $cafe-caramelo;
+    }
+}
+
+// Lista de pastelería y carrito
+section ul.list-unstyled {
+    margin-bottom: 0;
+
+    > li {
+        padding: 0.9rem 0;
+        border-bottom: 1px solid $border-color;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        h3 {
+            margin-bottom: 0.25rem;
+        }
+
+        p {
+            margin-bottom: 0.35rem;
+        }
+    }
+}
+
+// Carrito vacío
+section[aria-labelledby="titulo-carrito"] > h2 + p {
+    margin: 0;
+    text-align: center;
+    color: var(--bs-secondary-color);
+}
+
+// Subtotal general del carrito
+section[aria-labelledby="titulo-carrito"] > ul + p {
+    margin: 1rem 0 0;
+    padding-top: 0.75rem;
+    border-top: 2px solid $cafe-dorado;
+    font-size: 1.1rem;
+    text-align: right;
+}
+
+// Botones de acción principal ("Agregar al carrito", "Confirmar pedido"):
+// ocupan todo el ancho en pantallas chicas
+@include media-breakpoint-down(sm) {
+    section > .btn-primary:not([aria-pressed]),
+    section > .mb-3 + .btn-primary {
+        width: 100%;
+    }
+}
+
+// Botón deshabilitado más claro
+.btn:disabled {
+    opacity: 0.45;
+}
+
+// Foco visible para navegar con teclado
+.btn:focus-visible,
+select:focus-visible {
+    outline: 3px solid $cafe-dorado;
+    outline-offset: 2px;
+}
+
+// Nunca scroll horizontal en 375 px
+html,
+body {
+    overflow-x: hidden;
+}
+
+// =====================================================================
+// 4) ANIMACIONES DE ENTRADA (se desactivan si el usuario pidió menos movimiento)
+// =====================================================================
+@keyframes entrada-suave {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes aparece-pedido {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    main > header,
+    main section:not([aria-labelledby="titulo-menu"]),
+    section ul.list-unstyled > li,
+    main p[role="alert"] {
+        animation: entrada-suave 0.35s ease-out both;
+    }
+
+    // Las tarjetas aparecen una detrás de otra
+    main section:nth-of-type(2) {
+        animation-delay: 0.06s;
+    }
+
+    main section:nth-of-type(3) {
+        animation-delay: 0.12s;
+    }
+
+    // El pedido confirmado entra con un pequeño "pop"
+    main div[role="status"] {
+        animation: aparece-pedido 0.4s ease-out both;
+    }
+}
+
+// =====================================================================
+// 5) MODO OSCURO AUTOMÁTICO (según la configuración del celular o la PC)
+// =====================================================================
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark; // controles nativos (select, scrollbars) oscuros
+        --bs-body-bg: #1c130d;
+        --bs-body-color: #f1e4d4;
+        --bs-heading-color: #f1e4d4;
+        --bs-border-color: #4a3426;
+        --bs-secondary-color: #cdb9a3;
+        --origen-sombra: 0 2px 8px rgba(0, 0, 0, 0.45);
+    }
+
+    // Tarjetas de origen (.card de Bootstrap): fondo oscuro y texto claro
+    .card {
+        --bs-card-bg: #33241a;
+        --bs-card-color: #f1e4d4;
+        --bs-card-border-color: #4a3426;
+    }
+
+    main > header {
+        border-bottom-color: #e0a56a;
+
+        p,
+        .text-muted {
+            color: #e0a56a !important;
+        }
+    }
+
+    main section {
+        background: #2a1d15;
+        border-color: #4a3426;
+
+        > h2 {
+            border-bottom-color: #e0a56a;
+        }
+    }
+
+    main > section[aria-labelledby="titulo-menu"] {
+        background: none;
+    }
+
+    main p[role="status"],
+    main div[role="status"] {
+        background: #3a2a1f;
+    }
+
+    main p[role="alert"] {
+        background: #4a1f1a;
+        color: #ffd9d4;
+        border-color: #7a3a33;
+    }
+
+    // Botones "sin elegir" (expreso / filtrado)
+    .btn-primary[aria-pressed="false"] {
+        --bs-btn-color: #e0a56a;
+        --bs-btn-bg: #2a1d15;
+        --bs-btn-border-color: #e0a56a;
+        --bs-btn-hover-color: #f1e4d4;
+        --bs-btn-hover-bg: #3a2a1f;
+        --bs-btn-hover-border-color: #e0a56a;
+    }
+
+    // Botón "elegido": caramelo con texto blanco (se distingue del fondo oscuro)
+    .btn-primary[aria-pressed="true"] {
+        --bs-btn-bg: #8f5424;
+        --bs-btn-border-color: #e0a56a;
+        --bs-btn-hover-bg: #8f5424;
+        --bs-btn-hover-border-color: #e0a56a;
+    }
+
+    // Tarjetas de origen
+    button.card-body[aria-pressed] {
+        color: #f1e4d4;
+
+        &:hover {
+            background: #3a2a1f;
+        }
+
+        &[aria-pressed="true"] {
+            background: #3d2a1c;
+            box-shadow: inset 0 0 0 3px #e0a56a;
+        }
+    }
+
+    // Lista y subtotal
+    section ul.list-unstyled > li {
+        border-bottom-color: #4a3426;
+    }
+
+    section[aria-labelledby="titulo-carrito"] > ul + p {
+        border-top-color: #e0a56a;
+    }
+
+    // Botones + / - del carrito (eran marrón oscuro sobre marrón oscuro)
+    .btn-outline-secondary {
+        --bs-btn-color: #e0a56a;
+        --bs-btn-border-color: #8a6a4d;
+        --bs-btn-hover-color: #1c130d;
+        --bs-btn-hover-bg: #e0a56a;
+        --bs-btn-hover-border-color: #e0a56a;
+        --bs-btn-active-color: #1c130d;
+        --bs-btn-active-bg: #e0a56a;
+    }
+
+    .btn-outline-danger {
+        --bs-btn-color: #ff9d92;
+        --bs-btn-border-color: #b3564c;
+        --bs-btn-hover-color: #1c130d;
+        --bs-btn-hover-bg: #ff9d92;
+        --bs-btn-hover-border-color: #ff9d92;
+    }
+
+    .btn:focus-visible,
+    select:focus-visible {
+        outline-color: #e0a56a;
+    }
+}
+
+// El seguimiento va dentro de "Confirmar pedido": se dibuja como un bloque
+// simple y no como una tarjeta dentro de otra tarjeta
+section[aria-labelledby="titulo-seguimiento"] {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 1rem 0 0;
+
+    > h2 {
+        font-size: 1.05rem;
+        border-bottom: 0;
+        padding-bottom: 0;
+        margin-bottom: 0.5rem;
+    }
+}
