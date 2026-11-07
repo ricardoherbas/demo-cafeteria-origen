@@ -1,8 +1,8 @@
 # demo-cafeteria-origen
 
-## 📱 Demo en Vivo
+## Demo de la aplicacion
 
-¡Escanea el código QR con tu celular según tu ubicación para probar la aplicación en tiempo real!
+¡Escanea el código QR con tu celular para probar la aplicación en tiempo real en las diferentes ubicaciones!
 
 <table align="center">
   <tr>
